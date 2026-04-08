@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mobidziennik PRO</title>
+<style>
+body {
+    font-family: Arial;
+    background: #111;
+    color: white;
+    text-align: center;
+}
+input, button {
+    padding: 10px;
+    margin: 5px;
+}
+#panel { display: none; }
+</style>
+</head>
+
+<body>
+
+<h1>📘 Mobidziennik PRO</h1>
+
+<div id="login">
+    <h2>Logowanie</h2>
+    <input id="loginInput" placeholder="Login"><br>
+    <input id="hasloInput" type="password" placeholder="Hasło"><br>
+    <button onclick="loguj()">Zaloguj</button>
+</div>
+
+<div id="panel">
+    <h2>Witaj!</h2>
+
+    <h3>Dodaj ocenę</h3>
+    <input id="przedmiot" placeholder="Przedmiot">
+    <input id="ocena" placeholder="Ocena">
+    <button onclick="dodaj()">Dodaj</button>
+
+    <h3>Oceny:</h3>
+    <ul id="lista"></ul>
+</div>
+
+<script>
+let dane = JSON.parse(localStorage.getItem("dziennik")) || [];
+
+function loguj() {
+    let login = document.getElementById("loginInput").value;
+    let haslo = document.getElementById("hasloInput").value;
+
+    if(login === "admin" && haslo === "1234") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("panel").style.display = "block";
+        pokaz();
+    } else {
+        alert("Błędne hasło!");
+    }
+}
+
+function dodaj() {
+    let p = document.getElementById("przedmiot").value;
+    let o = document.getElementById("ocena").value;
+
+    dane.push({przedmiot: p, ocena: o});
+    localStorage.setItem("dziennik", JSON.stringify(dane));
+
+    pokaz();
+}
+
+function pokaz() {
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    dane.forEach(d => {
+        let li = document.createElement("li");
+        li.textContent = d.przedmiot + " - " + d.ocena;
+        lista.appendChild(li);
+    });
+}
+</script>
+
+</body>
+</html>
